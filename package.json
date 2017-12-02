@@ -2,7 +2,7 @@
   "name": "harvest-profit-units",
   "version": "1.0.0-alpha.2",
   "description": "Units helper for Harvest Profit javascript applications",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "repository": "https://github.com/HarvestProfit/harvest-profit-units",
   "author": "Jaryd Krishnan <jaryd@harvestprofit.com>",
   "license": "MIT",
@@ -13,6 +13,11 @@
     "report-coverage": "coveralls < ./coverage/lcov.info",
     "test": "jest test/ --coverage"
   },
+  "files": [
+    "LICENSE.md",
+    "README.md",
+    "dist"
+  ],
   "jest": {
     "collectCoverageFrom": [
       "src/**/!(index).{js,jsx}"

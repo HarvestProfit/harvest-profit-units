@@ -11,7 +11,7 @@
     "build": "babel src -d dist",
     "clean": "rm -rf ./dist",
     "report-coverage": "coveralls < ./coverage/lcov.info",
-    "test": "jest"
+    "test": "jest test/ --coverage"
   },
   "jest": {
     "collectCoverageFrom": [

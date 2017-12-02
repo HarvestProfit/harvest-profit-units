@@ -1,0 +1,35 @@
+{
+  "name": "harvest-profit-units",
+  "version": "1.0.0",
+  "description": "Units helper for Harvest Profit javascript applications",
+  "main": "src/index.js",
+  "repository": "https://github.com/HarvestProfit/harvest-profit-units",
+  "author": "Jaryd Krishnan <jaryd@harvestprofit.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "babel src -d dist",
+    "clean": "rm -rf ./dist",
+    "report-coverage": "coveralls < ./coverage/lcov.info",
+    "test": "jest"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/!(index).{js,jsx}"
+    ],
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    }
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "mathjs": "^3.17.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-airbnb": "^2.4.0",
+    "babel-preset-stage-2": "^6.24.1",
+    "coveralls": "^3.0.0",
+    "jest": "^21.2.1"
+  }
+}

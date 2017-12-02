@@ -2,6 +2,8 @@
   <img src="https://www.harvestprofit.com/logo.png" alt="Harvest Profit"></img>
 </div>
 
+[![npm](https://img.shields.io/npm/v/harvest-profit-units.svg)](https://www.npmjs.com/package/harvest-profit-units) [![npm](https://img.shields.io/npm/l/harvest-profit-units.svg)](https://github.com/HarvestProfit/harvest-profit-units/blob/master/LICENSE)
+
 ## Installation
 
 TODO

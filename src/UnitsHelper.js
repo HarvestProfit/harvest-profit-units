@@ -88,18 +88,14 @@ export default class UnitsHelper {
           lbsPerGallon,
         );
         const finalCalc = finalUnit.to(productUnit).toNumber();
-        if (finalCalc > 0) {
-          totalPerUnit = product.price * finalCalc;
-        }
+        totalPerUnit = product.price * finalCalc;
       } else {
         // If all else fails, try to convert
         const lineItemInProductUnits = Math
           .unit(1, lineItemUnit)
           .to(productUnit)
           .toNumber();
-        if (lineItemInProductUnits > 0) {
-          totalPerUnit = product.price * lineItemInProductUnits;
-        }
+        totalPerUnit = product.price * lineItemInProductUnits;
       }
     } catch (error) {
       totalPerUnit = product.price;

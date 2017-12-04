@@ -79,6 +79,19 @@ describe('UnitsHelper', () => {
     expect(gallonsToTons.toNumber()).toBeCloseTo(1);
   });
 
+  it('should convert liquids to solids based on the American assumption', () => {
+    const gallons = 8000;
+    const gallonsPerPound = 4;
+    const poundsPerGallon = 1 / gallonsPerPound;
+    const gallonsToTons = UnitsHelper.liquidToSolid(
+      gallons,
+      'gallons',
+      'tons',
+      poundsPerGallon,
+    );
+    expect(gallonsToTons.toNumber()).toBeCloseTo(1);
+  });
+
   describe('isLiquid', () => {
     it('should correctly recognize a liquid product', () => {
       const liquidProduct = liquidProductInTons;

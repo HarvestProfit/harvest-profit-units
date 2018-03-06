@@ -34,9 +34,9 @@ yarn run clean
 yarn run build
 
 # Either NPM
-npm publish
+npm publish --access public
 # Or Yarn, they do the same thing
-yarn publish
+yarn publish --access public
 ```
 
 ## License

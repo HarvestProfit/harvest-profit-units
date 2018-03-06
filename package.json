@@ -1,6 +1,6 @@
 {
-  "name": "harvest-profit-units",
-  "version": "1.0.0-alpha.3",
+  "name": "@harvest-profit/units",
+  "version": "1.0.0",
   "description": "Units helper for Harvest Profit javascript applications",
   "main": "dist/index.js",
   "repository": "https://github.com/HarvestProfit/harvest-profit-units",

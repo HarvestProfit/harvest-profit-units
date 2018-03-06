@@ -56,6 +56,12 @@ const lineItemInGallons = {
   units: 'gallons',
 };
 
+const lineItemInSeeds = {
+  applied_acres: 100,
+  amount: 300,
+  units: 'seeds',
+};
+
 /**
  * Here are the actual tests
  */
@@ -158,6 +164,29 @@ describe('UnitsHelper', () => {
       const lineItem = lineItemInGallons;
       const unitCost = UnitsHelper.perUnitCost(product, lineItem);
       expect(unitCost).toBeCloseTo(4000.00);
+    });
+  });
+
+  describe('line item amount per acre in product units', () => {
+    it('should convert the line item amount per acre into product units', () => {
+      const product = productInTons;
+      const lineItem = lineItemInLbs;
+      const amountInProductUnits = UnitsHelper.toProductUnits(lineItem, product);
+      expect(amountInProductUnits).toBeCloseTo(0.005, 3);
+    });
+
+    it('should convert the line item amount per acre into product units given a liquid product', () => {
+      const product = liquidProductInTons;
+      const lineItem = lineItemInGallons;
+      const amountInProductUnits = UnitsHelper.toProductUnits(lineItem, product);
+      expect(amountInProductUnits).toBeCloseTo(0.5, 1);
+    });
+
+    it('should convert the line item amount per acre into product units given a custom product', () => {
+      const product = productInCustomUnits;
+      const lineItem = lineItemInSeeds;
+      const amountInProductUnits = UnitsHelper.toProductUnits(lineItem, product);
+      expect(amountInProductUnits).toBeCloseTo(0.3, 1);
     });
   });
 

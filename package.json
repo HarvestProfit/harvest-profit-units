@@ -1,6 +1,6 @@
 {
   "name": "@harvest-profit/units",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Units helper for Harvest Profit javascript applications",
   "main": "dist/index.js",
   "repository": "https://github.com/HarvestProfit/harvest-profit-units",
@@ -28,11 +28,11 @@
   },
   "peerDependencies": {
     "lodash": "^4.17.4",
-    "mathjs": "^3.17.0"
+    "mathjs": "^4.0.0"
   },
   "dependencies": {
     "lodash": "^4.17.4",
-    "mathjs": "^3.17.0"
+    "mathjs": "^4.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

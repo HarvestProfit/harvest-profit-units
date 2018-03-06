@@ -188,6 +188,13 @@ describe('UnitsHelper', () => {
       const amountInProductUnits = UnitsHelper.toProductUnits(lineItem, product);
       expect(amountInProductUnits).toBeCloseTo(0.3, 1);
     });
+
+    it('should fall back to product units when converting the line item amount per acre into product units if error', () => {
+      const product = productInTons;
+      const lineItem = lineItemInSeeds;
+      const amountInProductUnits = UnitsHelper.toProductUnits(lineItem, product);
+      expect(amountInProductUnits).toBeCloseTo(300);
+    });
   });
 
   describe('per acre costs', () => {

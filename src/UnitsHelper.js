@@ -26,6 +26,8 @@ export const availableLiquidUnits = [
   'floz',
   'liters',
   'milliliters',
+  'pints',
+  'quarts',
 ];
 
 export default class UnitsHelper {
@@ -88,19 +90,62 @@ export default class UnitsHelper {
           lbsPerGallon,
         );
         const finalCalc = finalUnit.to(productUnit).toNumber();
-        totalPerUnit = product.price * finalCalc;
+        if (finalCalc > 0) {
+          totalPerUnit = product.price * finalCalc;
+        }
       } else {
         // If all else fails, try to convert
         const lineItemInProductUnits = Math
           .unit(1, lineItemUnit)
           .to(productUnit)
           .toNumber();
-        totalPerUnit = product.price * lineItemInProductUnits;
+        if (lineItemInProductUnits > 0) {
+          totalPerUnit = product.price * lineItemInProductUnits;
+        }
       }
     } catch (error) {
       totalPerUnit = product.price;
     }
     return totalPerUnit;
+  }
+
+  static toProductUnits = (item, product) => {
+    const productUnit = UnitsHelper.parseUnit(product.units);
+    const lineItemUnit = UnitsHelper.parseUnit(item.units);
+
+    const isProductLiquid = product.liquid && product.density > 0;
+    let totalAmount = 0;
+    try {
+      if (productUnit === 'custom') {
+        const amount = lineItemUnit === 'custom' ? product.multiplier : 1;
+        const unit = lineItemUnit === 'custom' ? 'seed' : lineItemUnit;
+        const lineItemInSeedUnits = Math.unit(amount, unit).to('seeds').toNumber();
+        const lineIteminCustomUnits = lineItemInSeedUnits / product.multiplier;
+        totalAmount = lineIteminCustomUnits * item.amount;
+      } else if (isProductLiquid && !UnitsHelper.isCompatibleUnit(lineItemUnit, productUnit)) {
+        const lbsPerGallon = Math.unit(`${product.density} lbs/gal`);
+        const finalUnit = Math.multiply(
+          Math.unit(1, lineItemUnit),
+          lbsPerGallon,
+        );
+        const finalCalc = finalUnit.to(productUnit).toNumber();
+        if (finalCalc > 0) {
+          totalAmount = finalCalc * item.amount;
+        }
+      } else {
+        // If all else fails, try to convert
+        const lineItemInProductUnits = Math
+          .unit(1, lineItemUnit)
+          .to(productUnit)
+          .toNumber();
+        if (lineItemInProductUnits > 0) {
+          totalAmount = lineItemInProductUnits * item.amount;
+        }
+      }
+    } catch (error) {
+      totalAmount = item.amount;
+    }
+    return totalAmount;
   }
 
   static parseUnit = unit =>

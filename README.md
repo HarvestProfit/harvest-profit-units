@@ -13,18 +13,10 @@ yarn add @harvest-profit/units
 
 To use, try the following:
 ```js
-import { UnitsHelper } from '@harvest-profit/units'
+import UnitsHelper from '@harvest-profit/units'
 
 const isCompatibleUnit = UnitsHelper.isCompatibleUnit('lbs', 'tons');
 console.log(isCompatibleUnit); // true
-```
-
-You can also import our flavor of `math.js` if you need it:
-```js
-import { math } from '@harvest-profit/units'
-
-const total = math.add(1, 2)
-console.log(total); // 3
 ```
 
 ## Development

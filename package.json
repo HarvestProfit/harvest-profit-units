@@ -28,11 +28,11 @@
   },
   "peerDependencies": {
     "lodash": "^4.17.4",
-    "mathjs": "^3.17.0"
+    "mathjs": "^4.0.0"
   },
   "dependencies": {
     "lodash": "^4.17.4",
-    "mathjs": "^3.17.0"
+    "mathjs": "^4.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

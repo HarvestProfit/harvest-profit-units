@@ -1482,7 +1482,7 @@ es-to-primitive@^1.1.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.1"
 
-escape-latex@1.0.0:
+escape-latex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/escape-latex/-/escape-latex-1.0.0.tgz#74b9e94d8c178645704c33791e95a4155b59718f"
 
@@ -2795,18 +2795,18 @@ makeerror@1.0.x:
   dependencies:
     tmpl "1.0.x"
 
-"mathjs@>= 3.20.2":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/mathjs/-/mathjs-4.0.0.tgz#17c95279a6fcd727be6ff4e478d609ee78c25502"
+mathjs@^3.20.2:
+  version "3.20.2"
+  resolved "https://registry.yarnpkg.com/mathjs/-/mathjs-3.20.2.tgz#3218aebde7de8cb5627c8fe3a1a216bf399ba91d"
   dependencies:
     complex.js "2.0.4"
     decimal.js "9.0.1"
-    escape-latex "1.0.0"
+    escape-latex "^1.0.0"
     fraction.js "4.0.4"
     javascript-natural-sort "0.7.1"
     seed-random "2.2.0"
     tiny-emitter "2.0.2"
-    typed-function "1.0.1"
+    typed-function "0.10.7"
 
 mem@^1.1.0:
   version "1.1.0"
@@ -3820,9 +3820,9 @@ type-check@~0.3.2:
   dependencies:
     prelude-ls "~1.1.2"
 
-typed-function@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/typed-function/-/typed-function-1.0.1.tgz#2fc13787268764cb09633fe57be5bd089180668a"
+typed-function@0.10.7:
+  version "0.10.7"
+  resolved "https://registry.yarnpkg.com/typed-function/-/typed-function-0.10.7.tgz#f702af7d77a64b61abf86799ff2d74266ebc4477"
 
 typedarray@^0.0.6:
   version "0.0.6"

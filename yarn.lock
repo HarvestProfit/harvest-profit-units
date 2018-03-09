@@ -2795,7 +2795,7 @@ makeerror@1.0.x:
   dependencies:
     tmpl "1.0.x"
 
-mathjs@^4.0.0:
+"mathjs@>= 3.20.2":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/mathjs/-/mathjs-4.0.0.tgz#17c95279a6fcd727be6ff4e478d609ee78c25502"
   dependencies:

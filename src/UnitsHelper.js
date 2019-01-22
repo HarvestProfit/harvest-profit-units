@@ -61,7 +61,10 @@ export default class UnitsHelper {
 
   static perAcreCost = (product, item, acres) => {
     const perUnitCost = UnitsHelper.perUnitCost(product, item);
-    const acresRatio = _.toNumber(item.applied_acres) / acres;
+    let acresRatio = 1;
+    if (item.split) {
+      acresRatio = _.toNumber(item.applied_acres) / acres;
+    }
     if (item.is_total) {
       const total = item.amount * perUnitCost;
       return total / acres;

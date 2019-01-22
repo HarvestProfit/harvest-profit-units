@@ -221,7 +221,7 @@ describe('UnitsHelper', () => {
 
     it('should calculate per acre costs from a given product, input applied to half the field', () => {
       const product = productInCustomUnits;
-      const lineItem = lineIteminCustomUnits;
+      const lineItem = { ...lineIteminCustomUnits, split: true };
       const unitCost = UnitsHelper.perAcreCost(product, lineItem, 200);
       expect(unitCost).toBeCloseTo(2000.00);
     });

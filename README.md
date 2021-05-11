@@ -19,6 +19,13 @@ const isCompatibleUnit = UnitsHelper.isCompatibleUnit('lbs', 'tons');
 console.log(isCompatibleUnit); // true
 ```
 
+Other useful functions...
+
+```js
+UnitsHelper.isLiquidUnit('floz') // true
+UnitsHelper.convertToGallons(8, 'pints') // 1
+```
+
 ## Development
 To deploy a new version to NPM, bump the version number, commit/merge to `master`, and run the following:
 ```bash

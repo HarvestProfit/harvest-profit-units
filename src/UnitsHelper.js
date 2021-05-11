@@ -171,12 +171,21 @@ export default class UnitsHelper {
       .replace('fl oz', 'floz')
       .replace('litres', 'liters');
 
-  static convertToGallons(amount, unit) {
-    const originalUnit = this.parseUnit(unit);
-    if (UnitsHelper.isCompatibleUnit(originalUnit, 'gallons')) {
-      return Math.unit(amount, originalUnit).to('gallons').toNumber();
+  static convertToUnit(amount, fromUnit, toUnit) {
+    const parsedFromUnit = this.parseUnit(fromUnit);
+    const parsedToUnit = this.parseUnit(toUnit);
+    if (UnitsHelper.isCompatibleUnit(parsedFromUnit, parsedToUnit)) {
+      return Math.unit(amount, parsedFromUnit).to(parsedToUnit).toNumber();
     }
-    throw new ConversionError(`Cannot convert ${unit} to gallons`);
+    throw new ConversionError(`Cannot convert ${parsedFromUnit} to ${parsedToUnit}`);
+  }
+
+  static convertToGallons(amount, unit) {
+    return this.convertToUnit(amount, unit, 'gallons');
+  }
+
+  static convertToPounds(amount, unit) {
+    return this.convertToUnit(amount, unit, 'lbs');
   }
 
   static isLiquidUnit = unit => UnitsHelper.isCompatibleUnit(this.parseUnit(unit), 'gallons')

@@ -268,8 +268,9 @@ describe('UnitsHelper', () => {
     });
   });
 
-  describe('#convertToGallons', () => {
+  describe('#convertToUnit', () => {
     it('should convert milliliters to gallons', () => {
+      expect(UnitsHelper.convertToUnit(100, 'milliliters', 'gallons')).toBeCloseTo(0.026, 3);
       expect(UnitsHelper.convertToGallons(100, 'milliliters')).toBeCloseTo(0.026, 3);
       // should work with short name
       expect(UnitsHelper.convertToGallons(100, 'ml')).toBeCloseTo(0.026, 3);
@@ -294,8 +295,10 @@ describe('UnitsHelper', () => {
     });
 
     it('should fail to convert lbs to gallons', () => {
+      expect(() => UnitsHelper.convertToUnit(100, 'lbs', 'gallons')).toThrowError();
       expect(() => UnitsHelper.convertToGallons(100, 'lbs')).toThrowError();
       expect(() => UnitsHelper.convertToGallons(100, 'pounds')).toThrowError();
+      expect(() => UnitsHelper.convertToPounds(100, 'gallons')).toThrowError();
     });
 
     it('should fail to convert ounces to gallons', () => {

@@ -24,6 +24,8 @@ Other useful functions...
 ```js
 UnitsHelper.isLiquidUnit('floz') // true
 UnitsHelper.convertToGallons(8, 'pints') // 1
+UnitsHelper.convertToUnit(8, 'pints', 'gallons') // 1
+UnitsHelper.convertToUnit(8, 'lbs', 'gallons') // throw ConversionError
 ```
 
 ## Development

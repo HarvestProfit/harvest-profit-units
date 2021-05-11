@@ -267,4 +267,39 @@ describe('UnitsHelper', () => {
       expect(unit).toEqual('metric tons');
     });
   });
+
+  describe('#convertToGallons', () => {
+    it('should convert milliliters to gallons', () => {
+      expect(UnitsHelper.convertToGallons(100, 'milliliters')).toBeCloseTo(0.026, 3);
+      // should work with short name
+      expect(UnitsHelper.convertToGallons(100, 'ml')).toBeCloseTo(0.026, 3);
+    });
+
+    it('should convert fl oz to gallons', () => {
+      expect(UnitsHelper.convertToGallons(100, 'fl oz')).toBeCloseTo(0.78, 2);
+      // should work with both forms of the unit
+      expect(UnitsHelper.convertToGallons(100, 'floz')).toBeCloseTo(0.78, 2);
+    });
+
+    it('should convert gallons to gallons', () => {
+      expect(UnitsHelper.convertToGallons(100, 'gallons')).toBeCloseTo(100);
+      // should work with short name
+      expect(UnitsHelper.convertToGallons(100, 'gal')).toBeCloseTo(100);
+    });
+
+    it('should convert pints to gallons', () => {
+      expect(UnitsHelper.convertToGallons(100, 'pints')).toBeCloseTo(12.5, 1);
+      // should work with short name
+      expect(UnitsHelper.convertToGallons(100, 'pt')).toBeCloseTo(12.5, 1);
+    });
+
+    it('should fail to convert lbs to gallons', () => {
+      expect(() => UnitsHelper.convertToGallons(100, 'lbs')).toThrowError();
+      expect(() => UnitsHelper.convertToGallons(100, 'pounds')).toThrowError();
+    });
+
+    it('should fail to convert ounces to gallons', () => {
+      expect(() => UnitsHelper.convertToGallons(100, 'oz')).toThrowError();
+    });
+  });
 });

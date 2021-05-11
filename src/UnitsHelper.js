@@ -30,6 +30,14 @@ export const availableLiquidUnits = [
   'quarts',
 ];
 
+export class ConversionError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'ConversionError';
+  }
+}
+
+
 export default class UnitsHelper {
   static isCompatibleUnit = (unit1, unit2) =>
     Math.unit(1, unit1).equalBase(Math.unit(1, unit2))
@@ -162,4 +170,14 @@ export default class UnitsHelper {
     unit
       .replace('fl oz', 'floz')
       .replace('litres', 'liters');
+
+  static convertToGallons(amount, unit) {
+    const originalUnit = this.parseUnit(unit);
+    if (UnitsHelper.isCompatibleUnit(originalUnit, 'gallons')) {
+      return Math.unit(amount, originalUnit).to('gallons').toNumber();
+    }
+    throw new ConversionError(`Cannot convert ${unit} to gallons`);
+  }
+
+  static isLiquidUnit = unit => UnitsHelper.isCompatibleUnit(this.parseUnit(unit), 'gallons')
 }

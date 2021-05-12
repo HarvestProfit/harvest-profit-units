@@ -1,5 +1,4 @@
-import _ from 'lodash';
-import Math from './Math';
+import Units from './Units';
 
 export const availableBushelUnits = [
   'bushels',
@@ -39,16 +38,13 @@ export class ConversionError extends Error {
 
 
 export default class UnitsHelper {
-  static isCompatibleUnit = (unit1, unit2) =>
-    Math.unit(1, unit1).equalBase(Math.unit(1, unit2))
+  static isCompatibleUnit = (unit1, unit2) => Units.isCompatible(unit1, unit2);
 
   static isLiquid = product => product.liquid !== false && product.density > 0;
 
-  static liquidToSolid = (liquidUnits, liquidUnitName, solidUnitName, density, densityName = 'lbs/gal') => {
-    const densityConversion = Math.unit(density, densityName);
-    const totalLiquid = Math.unit(liquidUnits, liquidUnitName);
-    const totalSolid = Math.multiply(totalLiquid, densityConversion);
-    return totalSolid.to(solidUnitName);
+  static liquidToSolid = (liquidAmount, liquidUnitName, solidUnitName, density) => {
+    const liquidAmountInGallons = new Units(liquidAmount, liquidUnitName).to('gallons');
+    return new Units(liquidAmountInGallons.toNumber() * density, 'lbs').to(solidUnitName);
   }
 
   static listAvailableUnits(product) {
@@ -71,7 +67,7 @@ export default class UnitsHelper {
     const perUnitCost = UnitsHelper.perUnitCost(product, item);
     let acresRatio = 1;
     if (item.split) {
-      acresRatio = _.toNumber(item.applied_acres) / acres;
+      acresRatio = parseFloat(item.applied_acres || 0) / acres;
     }
     if (item.is_total) {
       const total = item.amount * perUnitCost;
@@ -80,102 +76,55 @@ export default class UnitsHelper {
     return item.amount * perUnitCost * acresRatio;
   }
 
-  static perUnitCost = (product, item) => {
+  static lineItemToProductUnits = (item, product) => {
     const productUnit = UnitsHelper.parseUnit(product.units);
     const lineItemUnit = UnitsHelper.parseUnit(item.units);
 
     const isProductLiquid = product.liquid && product.density > 0;
 
-    let totalPerUnit = 0;
     try {
       if (productUnit === 'custom') {
         const amount = lineItemUnit === 'custom' ? product.multiplier : 1;
         const unit = lineItemUnit === 'custom' ? 'seed' : lineItemUnit;
-        const lineItemInSeedUnits = Math.unit(amount, unit).to('seeds').toNumber();
+        const lineItemInSeedUnits = new Units(amount, unit).to('seeds').toNumber();
         const lineIteminCustomUnits = lineItemInSeedUnits / product.multiplier;
-        totalPerUnit = product.price * lineIteminCustomUnits;
+        return lineIteminCustomUnits;
       } else if (isProductLiquid && !UnitsHelper.isCompatibleUnit(lineItemUnit, productUnit)) {
-        const lbsPerGallon = Math.unit(`${product.density} lbs/gal`);
-        const finalUnit = Math.multiply(
-          Math.unit(1, lineItemUnit),
-          lbsPerGallon,
-        );
-        const finalCalc = finalUnit.to(productUnit).toNumber();
+        const finalCalc = UnitsHelper.liquidToSolid(1, lineItemUnit, productUnit, product.density).toNumber();
         if (finalCalc > 0) {
-          totalPerUnit = product.price * finalCalc;
+          return finalCalc;
         }
       } else {
         // If all else fails, try to convert
-        const lineItemInProductUnits = Math
-          .unit(1, lineItemUnit)
-          .to(productUnit)
-          .toNumber();
+        const lineItemInProductUnits = new Units(1, lineItemUnit).to(productUnit).toNumber();
         if (lineItemInProductUnits > 0) {
-          totalPerUnit = product.price * lineItemInProductUnits;
+          return lineItemInProductUnits;
         }
       }
     } catch (error) {
-      totalPerUnit = product.price;
+      return 1;
     }
-    return totalPerUnit;
+
+    return 0;
+  }
+
+  static perUnitCost = (product, item) => {
+    return UnitsHelper.lineItemToProductUnits(item, product) * product.price;
   }
 
   static toProductUnits = (item, product) => {
-    const productUnit = UnitsHelper.parseUnit(product.units);
-    const lineItemUnit = UnitsHelper.parseUnit(item.units);
-
-    const isProductLiquid = product.liquid && product.density > 0;
-    let totalAmount = 0;
-    try {
-      if (productUnit === 'custom') {
-        const amount = lineItemUnit === 'custom' ? product.multiplier : 1;
-        const unit = lineItemUnit === 'custom' ? 'seed' : lineItemUnit;
-        const lineItemInSeedUnits = Math.unit(amount, unit).to('seeds').toNumber();
-        const lineIteminCustomUnits = lineItemInSeedUnits / product.multiplier;
-        totalAmount = lineIteminCustomUnits * item.amount;
-      } else if (isProductLiquid && !UnitsHelper.isCompatibleUnit(lineItemUnit, productUnit)) {
-        const lbsPerGallon = Math.unit(`${product.density} lbs/gal`);
-        const finalUnit = Math.multiply(
-          Math.unit(1, lineItemUnit),
-          lbsPerGallon,
-        );
-        const finalCalc = finalUnit.to(productUnit).toNumber();
-        if (finalCalc > 0) {
-          totalAmount = finalCalc * item.amount;
-        }
-      } else {
-        // If all else fails, try to convert
-        const lineItemInProductUnits = Math
-          .unit(1, lineItemUnit)
-          .to(productUnit)
-          .toNumber();
-        if (lineItemInProductUnits > 0) {
-          totalAmount = lineItemInProductUnits * item.amount;
-        }
-      }
-    } catch (error) {
-      totalAmount = item.amount;
-    }
-    return totalAmount;
+    return UnitsHelper.lineItemToProductUnits(item, product) * item.amount;
   }
 
-  static parseUnit = unit =>
-    unit
-      .replace('per ', '')
-      .replace('fl oz', 'floz')
-      .replace(' - ', '')
-      .replace('metric ton', 'tonne');
+  static parseUnit = unit => unit.replace('per ', '');
 
-  static parseOldUnit = unit =>
-    unit
-      .replace('fl oz', 'floz')
-      .replace('litres', 'liters');
+  static parseOldUnit = unit => unit;
 
   static convertToUnit(amount, fromUnit, toUnit) {
     const parsedFromUnit = this.parseUnit(fromUnit);
     const parsedToUnit = this.parseUnit(toUnit);
     if (UnitsHelper.isCompatibleUnit(parsedFromUnit, parsedToUnit)) {
-      return Math.unit(amount, parsedFromUnit).to(parsedToUnit).toNumber();
+      return new Units(amount, parsedFromUnit).to(parsedToUnit).toNumber();
     }
     throw new ConversionError(`Cannot convert ${parsedFromUnit} to ${parsedToUnit}`);
   }

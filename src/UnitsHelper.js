@@ -1,40 +1,12 @@
 import Units from './Units';
 
-export const availableBushelUnits = [
-  'bushels',
-];
+export const availableBushelUnits = Units.selectableUnits('yield');
 
-export const availableSeedUnits = [
-  'seeds',
-  'bags',
-  'units - 130k',
-  'units - 140k',
-];
+export const availableSeedUnits = Units.selectableUnits('seed');
 
-export const availableSolidUnits = [
-  'lbs',
-  'oz',
-  'tons',
-  'grams',
-  'kilograms',
-  'metric tons',
-];
+export const availableSolidUnits = Units.selectableUnits('weight');
 
-export const availableLiquidUnits = [
-  'gallons',
-  'floz',
-  'liters',
-  'milliliters',
-  'pints',
-  'quarts',
-];
-
-export class ConversionError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = 'ConversionError';
-  }
-}
+export const availableLiquidUnits = Units.selectableUnits('liquid');
 
 
 export default class UnitsHelper {
@@ -123,10 +95,7 @@ export default class UnitsHelper {
   static convertToUnit(amount, fromUnit, toUnit) {
     const parsedFromUnit = this.parseUnit(fromUnit);
     const parsedToUnit = this.parseUnit(toUnit);
-    if (UnitsHelper.isCompatibleUnit(parsedFromUnit, parsedToUnit)) {
-      return new Units(amount, parsedFromUnit).to(parsedToUnit).toNumber();
-    }
-    throw new ConversionError(`Cannot convert ${parsedFromUnit} to ${parsedToUnit}`);
+    return new Units(amount, parsedFromUnit).to(parsedToUnit).toNumber();
   }
 
   static convertToGallons(amount, unit) {

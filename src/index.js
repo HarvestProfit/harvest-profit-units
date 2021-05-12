@@ -1,6 +1,6 @@
 import UnitsHelper from './UnitsHelper';
-import math from './Math';
+import Units from './Units';
 
-export { math };
+export { Units };
 
 export default UnitsHelper;

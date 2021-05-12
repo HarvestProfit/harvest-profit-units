@@ -4,6 +4,8 @@ import UnitsHelper, {
   availableLiquidUnits,
 } from '../src/UnitsHelper';
 
+import Units from '../src/Units';
+
 /**
  * These are vars for use in calculations
  */
@@ -241,30 +243,55 @@ describe('UnitsHelper', () => {
     });
   });
 
-  describe('parse old units', () => {
+  describe('Units', () => {
+    it('should inflate all definitions of grams', () => {
+      expect(() => new Units(10, 'g')).not.toThrowError();
+      expect(() => new Units(10, 'gram')).not.toThrowError();
+      expect(() => new Units(10, 'grams')).not.toThrowError();
+
+      expect(() => new Units(10, 'gs')).toThrowError();
+    });
+
     it('should parse "litres" correctly', () => {
-      const unit = UnitsHelper.parseOldUnit('litres');
-      expect(unit).toEqual('liters');
+      const unit = new Units(10, 'litres');
+      expect(unit.to('liters').toNumber()).toEqual(10);
     });
 
-    it('should parse "fl oz" correctly', () => {
-      const unit = UnitsHelper.parseOldUnit('fl oz');
-      expect(unit).toEqual('floz');
+    it('should convert floz to gallons', () => {
+      const unit = new Units(10, 'floz');
+      expect(unit.to('gal').toNumber()).toBeCloseTo(0.078, 3);
     });
 
-    it('should leave new units alone', () => {
-      const unit = UnitsHelper.parseOldUnit('milliliters');
-      expect(unit).toEqual('milliliters');
+    it('should convert bags to seeds', () => {
+      const unit = new Units(2, 'bags');
+      expect(unit.to('seeds').toNumber()).toEqual(160000);
     });
 
-    it('should leave units like "units - 140k" alone', () => {
-      const unit = UnitsHelper.parseOldUnit('units - 140k');
-      expect(unit).toEqual('units - 140k');
+    it('should fail to convert lbs to gallons', () => {
+      const unit = new Units(2, 'lbs');
+      expect(() => unit.to('gallons')).toThrowError();
     });
 
-    it('should leave units like "metric tons" alone', () => {
-      const unit = UnitsHelper.parseOldUnit('metric tons');
-      expect(unit).toEqual('metric tons');
+    it('should print nicely', () => {
+      const unit = new Units(2, 'lbs');
+      expect(unit.toString()).toEqual('2 lbs');
+    });
+
+    it('should show compatibility', () => {
+      const unit = new Units(2, 'lbs');
+      expect(unit.isCompatible('grams')).toEqual(true);
+      expect(unit.isCompatible('lbs')).toEqual(true);
+      expect(unit.isCompatible('tons')).toEqual(true);
+      expect(unit.isCompatible('seeds')).toEqual(false);
+      expect(unit.isCompatible('gallons')).toEqual(false);
+      expect(unit.isCompatible(new Units(2, 'gallons'))).toEqual(false);
+      expect(unit.isCompatible(new Units(2, 'lbs'))).toEqual(true);
+    });
+
+    it('should have the details accessible', () => {
+      const unit = new Units(2, 'lbs');
+      expect(unit.unit).toEqual('lbs');
+      expect(unit.toNumber()).toEqual(2);
     });
   });
 

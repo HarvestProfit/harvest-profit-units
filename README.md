@@ -19,13 +19,35 @@ const isCompatibleUnit = UnitsHelper.isCompatibleUnit('lbs', 'tons');
 console.log(isCompatibleUnit); // true
 ```
 
-Other useful functions...
+More commonly, you will use the line item/product functions or to generate units for select boxes
 
 ```js
-UnitsHelper.isLiquidUnit('floz') // true
-UnitsHelper.convertToGallons(8, 'pints') // 1
-UnitsHelper.convertToUnit(8, 'pints', 'gallons') // 1
-UnitsHelper.convertToUnit(8, 'lbs', 'gallons') // throw ConversionError
+UnitsHelper.perAcreCost(product, item, acres) // 3.50
+UnitsHelper.listAvailableUnits(product) // ['gallons', 'floz', 'milliliters', ...]
+```
+
+All of this is build off of the `Units` object and a set of definitions declared in this repo.
+You can use this object to handle any conversions or any other interaction with those units.
+
+```js
+import { Units } from '@harvest-profit/units';
+
+const amount = new Units(1, 'gallon');
+amount.to('pints').toNumber() // 8 pints
+
+amount.isCompatible('lbs') // false
+
+
+// Can use any different name. If a name is missing, just add it to the aliases in the definition in a PR
+const gal = new Units(1, 'gal');
+const gallon = new Units(1, 'gallon');
+const gallons = new Units(1, 'gallons');
+
+Units.selectableUnits('liquid') // ['gallons', 'floz', 'milliliters', ...]
+
+Units.isCompatible('g', 'lb') // true
+Units.isCompatible(gallon, 'lb') // false
+Units.isCompatible(gal, gallon) // true
 ```
 
 ## Development

@@ -116,6 +116,10 @@ describe('UnitsHelper', () => {
     it('should list available solid units when unit is "lb"', () => {
       const units = UnitsHelper.listAvailableUnits({ units: 'lb' });
       expect(units).toEqual(availableSolidUnits);
+      expect(units).toContain('lbs');
+      expect(units).toContain('grams');
+      expect(units).toContain('tons');
+      expect(units).toContain('metric tons');
     });
 
     it('should list available bushel units when unit is "bushel"', () => {
@@ -126,11 +130,19 @@ describe('UnitsHelper', () => {
     it('should list available liquid units when unit is "liter"', () => {
       const units = UnitsHelper.listAvailableUnits({ units: 'liter' });
       expect(units).toEqual(availableLiquidUnits);
+      expect(units).toContain('milliliters');
+      expect(units).toContain('gallons');
+      expect(units).toContain('liters');
+      expect(units).toContain('floz');
     });
 
     it('should list available seed units when unit is "seed"', () => {
       const units = UnitsHelper.listAvailableUnits({ units: 'seed' });
       expect(units).toEqual(availableSeedUnits);
+      expect(units).toContain('seeds');
+      expect(units).toContain('units - 130k');
+      expect(units).toContain('bags');
+      expect(units).toContain('units - 140k');
     });
 
     it('should list no available seed units when unit is "custom"', () => {

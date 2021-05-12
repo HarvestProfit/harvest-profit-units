@@ -1,73 +1,5 @@
-import liquidDefinitions from './definitions/liquid';
-import solidDefinitions from './definitions/solid';
-import seedDefinitions from './definitions/seed';
-import yieldDefinitions from './definitions/yield';
-
-const inflatedUnits = {};
-
-class UnitRedefinitionError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = 'UnitRedefinitionError';
-  }
-}
-
-class UndefinedUnitError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = 'UndefinedUnitError';
-  }
-}
-
-class UnitCompatibilityError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = 'UnitCompatibilityError';
-  }
-}
-
-function addUnitDefinitionWithoutError(group, name, value, primaryName, fullName) {
-  if (!inflatedUnits[name]) {
-    inflatedUnits[name] = {
-      group,
-      value,
-      primaryName,
-      fullName
-    };
-  }
-
-
-}
-function addUnitDefinition(group, name, value, primaryName, fullName) {
-  if (inflatedUnits[name]) {
-    throw new UnitRedefinitionError(`${name} is already a defined unit. Do not redefine units`);
-  }
-
-  addUnitDefinitionWithoutError(group, name, value, primaryName, fullName);
-}
-
-function inflateUnits(compatibilityGroup, definitions) {
-  Object.keys(definitions).forEach((unitName) => {
-    const definition = definitions[unitName];
-    addUnitDefinition(compatibilityGroup, unitName, definition.value, unitName, definition.name);
-    addUnitDefinitionWithoutError(compatibilityGroup, definition.name, definition.value, unitName, definition.name);
-    const plural = definition.name + (definition.name[definition.name.length - 1] === 's' ? 'es' : 's');
-    addUnitDefinitionWithoutError(compatibilityGroup, plural, definition.value, unitName, definition.name);
-
-
-    (definition.aliases || []).forEach((aliasName) => {
-      addUnitDefinition(compatibilityGroup, aliasName, definition.value, unitName, definition.name);
-      const plural = aliasName + (aliasName[aliasName.length - 1] === 's' ? 'es' : 's');
-      addUnitDefinitionWithoutError(compatibilityGroup, plural, definition.value, unitName, definition.name);
-    });
-  });
-}
-
-inflateUnits('liquid', liquidDefinitions);
-inflateUnits('weight', solidDefinitions);
-inflateUnits('seed', seedDefinitions);
-inflateUnits('yield', yieldDefinitions);
-
+import { inflatedUnits, selectableUnitsByGroup } from './definitions';
+import { UndefinedUnitError, UnitCompatibilityError } from './errors';
 
 function retrieveUnit(unit) {
   if (typeof unit === 'string') return unit;
@@ -84,6 +16,8 @@ function checkUnitValidity(unitArgument) {
 }
 
 
+// This class is used to operate with units. Providing invalid units to its functions will result in
+//  it throwing a UndefinedUnitError
 class Units {
   constructor(value, unit) {
     checkUnitValidity(unit);
@@ -95,6 +29,13 @@ class Units {
     }
   }
 
+  // Given a compatibility group name, it will return the common units in that group.
+  // group names include: weight, liquid, seed, and yield
+  static selectableUnits(group) {
+    return selectableUnitsByGroup[group];
+  }
+
+  // Checks if 2 units are compatible. Units may be a Units object.
   static isCompatible(unit1, unit2) {
     checkUnitValidity(unit1);
     checkUnitValidity(unit2);
@@ -102,14 +43,17 @@ class Units {
     return inflatedUnits[retrieveUnit(unit1)].group === inflatedUnits[retrieveUnit(unit2)].group;
   }
 
-  equalBase = (unit) => this.isCompatible(unit);
+  // Checks if a unit is compatible with the object's unit.
   isCompatible(unit) {
     checkUnitValidity(unit);
 
     return inflatedUnits[this.unit].group === inflatedUnits[retrieveUnit(unit)].group;
   }
 
-  to(unitArgument, conversionObject = null) {
+  // Converts the object's value into the provided unit. The provided unit may be a Units object.
+  //  This will throw a UnitCompatibilityError when a unit is not compatible.
+  // returns a Units object (so you can chain)
+  to(unitArgument) {
     const unit = retrieveUnit(unitArgument)
     if (!this.isCompatible(unit)) {
       throw new UnitCompatibilityError(`${unit} is not compatible with ${this.unit}`);
@@ -120,10 +64,12 @@ class Units {
     return new Units(convertedValue, unit);
   }
 
+  // Returns the numeric value of the unit.
   toNumber() {
     return this.value;
   }
 
+  // Prints out the unit as "value unit"
   toString() {
     return `${this.value} ${this.unit}`
   }

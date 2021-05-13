@@ -17,16 +17,16 @@ export default {
     value: 80000,
     selectableAs: 'bags'
   },
-  'units - 130k': {
-    name: 'units - 130k',
-    aliases: ['units130k'],
+  'unit - 130k': {
+    name: 'unit - 130k',
+    aliases: ['unit130k', 'units - 130k', 'units130k'],
     value: 130000,
-    selectableAs: 'units - 130k'
+    selectableAs: 'unit - 130k'
   },
-  'units - 140k': {
-    name: 'units - 140k',
-    aliases: ['units140k'],
+  'unit - 140k': {
+    name: 'unit - 140k',
+    aliases: ['unit140k', 'units - 140k', 'units140k'],
     value: 140000,
-    selectableAs: 'units - 140k',
+    selectableAs: 'unit - 140k',
   },
 }

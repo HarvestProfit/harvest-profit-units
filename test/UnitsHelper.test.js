@@ -235,7 +235,14 @@ describe('UnitsHelper', () => {
 
     it('should calculate per acre costs from a given product, input applied to half the field', () => {
       const product = productInCustomUnits;
-      const lineItem = { ...lineIteminCustomUnits, split: true };
+      const lineItem = lineIteminCustomUnits;
+      const unitCost = UnitsHelper.perAcreCost(product, lineItem, 200);
+      expect(unitCost).toBeCloseTo(2000.00);
+    });
+
+    it('should calculate per acre costs from a given product, input applied to half the field', () => {
+      const product = productInCustomUnits;
+      const lineItem = { ...lineIteminCustomUnits, applied_acres: 50, applied_acres_units: 'percent' };
       const unitCost = UnitsHelper.perAcreCost(product, lineItem, 200);
       expect(unitCost).toBeCloseTo(2000.00);
     });

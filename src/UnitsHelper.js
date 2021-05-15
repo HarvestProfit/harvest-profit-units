@@ -38,8 +38,26 @@ export default class UnitsHelper {
   static perAcreCost = (product, item, acres) => {
     const perUnitCost = UnitsHelper.perUnitCost(product, item);
     let acresRatio = 1;
-    if (item.split) {
-      acresRatio = parseFloat(item.applied_acres || 0) / acres;
+
+    let itemAppliedAcres = parseFloat(item.applied_acres);
+    function isSplit() {
+      if (item.applied_acres_units === 'percent') return false;
+      if (Number.isNaN(itemAppliedAcres)) return false;
+      if (itemAppliedAcres === acres) return false;
+      return true;
+    }
+
+    function isRatio() {
+      if (item.applied_acres_units !== 'percent') return false;
+      if (Number.isNaN(itemAppliedAcres)) return false;
+      if (itemAppliedAcres === 100) return false;
+      return true;
+    }
+
+    if (isSplit()) {
+      acresRatio = itemAppliedAcres / acres;
+    } else if (isRatio()) {
+      acresRatio = itemAppliedAcres / 100;
     }
     if (item.is_total) {
       const total = item.amount * perUnitCost;

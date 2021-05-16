@@ -112,6 +112,28 @@ describe('UnitsHelper', () => {
     });
   });
 
+  describe('default selectable unit', () => {
+    it('should return gallons for liquid units', () => {
+      expect(Units.defaultSelectableUnit('liquid')).toEqual('gallons');
+    });
+
+    it('should return lbs for weight units', () => {
+      expect(Units.defaultSelectableUnit('weight')).toEqual('lbs');
+    });
+
+    it('should return seeds for seed units', () => {
+      expect(Units.defaultSelectableUnit('seed')).toEqual('seeds');
+    });
+
+    it('should return bushels for yield units', () => {
+      expect(Units.defaultSelectableUnit('yield')).toEqual('bushels');
+    });
+
+    it('should return acres for area units', () => {
+      expect(Units.defaultSelectableUnit('area')).toEqual('acres');
+    });
+  });
+
   describe('list available units', () => {
     it('should list available solid units when unit is "lb"', () => {
       const units = UnitsHelper.listAvailableUnits({ units: 'lb' });

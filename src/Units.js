@@ -30,9 +30,14 @@ class Units {
   }
 
   // Given a compatibility group name, it will return the common units in that group.
-  // group names include: weight, liquid, seed, and yield
+  // group names include: weight, liquid, seed, area, and yield
   static selectableUnits(group) {
     return selectableUnitsByGroup[group];
+  }
+
+  // Given a compatibility group name, it willl return the default unit
+  static defaultSelectableUnit(group) {
+    return Units.selectableUnits(group)[0];
   }
 
   // Checks if 2 units are compatible. Units may be a Units object.

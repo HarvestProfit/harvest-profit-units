@@ -7,41 +7,15 @@
 */
 
 export default {
-  g: {
-    name: 'gram',
+  ac: {
+    name: 'acre',
     value: 1,
-    selectableAs: 'grams',
-  },
-  mg: {
-    name: 'milligram',
-    value: 0.001,
-  },
-  kg: {
-    name: 'kilogram',
-    value: 1000,
-    selectableAs: 'kilograms',
-  },
-  t: {
-    name: 'metric ton',
-    aliases: ['tonne'],
-    value: 1000000,
-    selectableAs: 'metric tons',
-  },
-  ton: {
-    name: 'ton',
-    value: 907184.74,
-    selectableAs: 'tons',
-  },
-  oz: {
-    name: 'ounce',
-    value: 28.349523125,
-    selectableAs: 'oz',
-  },
-  lbs: {
-    name: 'pound',
-    aliases: ['lb'],
-    value: 453.592375,
-    selectableAs: 'lbs',
+    selectableAs: 'acres',
     default: true,
   },
+  ha: {
+    name: 'hectare',
+    value: 2.4710562857,
+    selectableAs: 'hectare',
+  }
 }

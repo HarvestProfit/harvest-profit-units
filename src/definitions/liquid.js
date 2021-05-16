@@ -32,6 +32,7 @@ export default {
     name: 'gallon',
     value: 3.785411784,
     selectableAs: 'gallons',
+    default: true,
   },
   floz: {
     name: 'fluid ounce',

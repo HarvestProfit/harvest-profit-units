@@ -10,7 +10,8 @@ export default {
   seed: {
     name: 'seed',
     value: 1,
-    selectableAs: 'seeds'
+    selectableAs: 'seeds',
+    default: true,
   },
   bag: {
     name: 'bag',

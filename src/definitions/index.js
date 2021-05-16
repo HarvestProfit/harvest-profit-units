@@ -2,6 +2,7 @@ import liquidDefinitions from './liquid';
 import solidDefinitions from './solid';
 import seedDefinitions from './seed';
 import yieldDefinitions from './yield';
+import areaDefinitions from './area';
 import { UnitRedefinitionError, UndefinedUnitError } from '../errors';
 
 export const inflatedUnits = {};
@@ -46,7 +47,12 @@ function inflateUnits(compatibilityGroup, definitions) {
 
     if (definition.selectableAs) {
       selectableUnitsByGroup[compatibilityGroup] = selectableUnitsByGroup[compatibilityGroup] || [];
-      selectableUnitsByGroup[compatibilityGroup].push(definition.selectableAs);
+      if (definition.default) {
+        selectableUnitsByGroup[compatibilityGroup].unshift(definition.selectableAs);
+      } else {
+        selectableUnitsByGroup[compatibilityGroup].push(definition.selectableAs);
+      }
+
     }
   });
 }
@@ -56,3 +62,4 @@ inflateUnits('liquid', liquidDefinitions);
 inflateUnits('weight', solidDefinitions);
 inflateUnits('seed', seedDefinitions);
 inflateUnits('yield', yieldDefinitions);
+inflateUnits('area', areaDefinitions);

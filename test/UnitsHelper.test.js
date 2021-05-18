@@ -162,9 +162,9 @@ describe('UnitsHelper', () => {
       const units = UnitsHelper.listAvailableUnits({ units: 'seed' });
       expect(units).toEqual(availableSeedUnits);
       expect(units).toContain('seeds');
-      expect(units).toContain('unit - 130k');
+      expect(units).toContain('units - 130k');
       expect(units).toContain('bags');
-      expect(units).toContain('unit - 140k');
+      expect(units).toContain('units - 140k');
     });
 
     it('should list no available seed units when unit is "custom"', () => {
